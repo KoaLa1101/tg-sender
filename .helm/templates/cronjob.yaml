@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.name }}-cron
+  namespace: {{ .Release.Namespace }}
+spec:
+  schedule: {{ .Values.cronTime }}   #"0 9 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: curl
+            image: appropriate/curl
+            command: ["/bin/sh", "-c", "curl tg-sender-svc.metric.svc:9438/send"]
+          restartPolicy: OnFailure

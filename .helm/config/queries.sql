@@ -1,0 +1,2 @@
+'Распределение по вебам';SELECT JSON_VALUE(extra, '$.host_name') AS host_name, status, controller, count(1) AS cnt FROM app.metrics WHERE published_ms >= toDateTime(now() - interval 24 hour) AND status in ('event', 'error') GROUP BY host_name, controller, status ORDER BY count(1) DESC
+'События';SELECT controller, action, status, message, count(1) AS cnt FROM app.metrics WHERE published_ms >= toDateTime(now() - interval 24 hour) AND status IN ('event', 'error') GROUP BY controller, action, status, message ORDER BY controller, action, status, message

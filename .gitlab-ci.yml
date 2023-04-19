@@ -1,0 +1,17 @@
+Deploy TG_SENDER:
+  stage: deploy
+  variables:
+    PROJECT_NAME: tg-sender
+    PROJECT_PATH: cluster_metrics/tg-sender
+    NAMESPACE: metric
+    PROJECT_NAME_IN_CLUSTER: tg-sender
+  only:
+    changes:
+      - cluster_metrics/tg-sender/**/*
+      - cluster_metrics/tg-sender/*
+  script:
+    - cd ${CI_PROJECT_DIR}/${PROJECT_PATH}/.helm
+    - helm upgrade --install -n ${NAMESPACE} ${PROJECT_NAME_IN_CLUSTER} ./ -f ./values-${CI_COMMIT_BRANCH}.yaml
+  except: [schedules]
+  tags:
+    - ci-${CI_COMMIT_BRANCH}

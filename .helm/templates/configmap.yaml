@@ -1,0 +1,10 @@
+{{- if .Values.configMap.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}-config-map
+  namespace: {{ .Release.Namespace }}
+data:
+{{- $path := printf "%s/*" .Values.config.path -}}
+{{- (.Files.Glob $path ).AsConfig | nindent 2 }}
+{{- end -}}

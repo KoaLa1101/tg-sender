@@ -1,0 +1,43 @@
+name: tg-sender
+
+image:
+  registry: k8s-registry.b-m-z.ru
+  name: tg-sender
+  tag: '1.1.1'
+  pullPolicy: IfNotPresent
+  pullSecrets:
+  - name: regcred
+
+deployment:
+  replicas: 1
+  additionalLabels: []
+  additionalAnnotations: []
+  ports:
+  - name: sender
+    protocol: TCP
+    port: 9438
+  resources:
+    limits:
+      cpu: 100m
+      memory: 150Mi
+    requests:
+      cpu: 50m
+      memory: 50Mi
+
+configMap:
+  enabled: true
+
+config:
+  path: config
+
+service:
+  type: ClusterIP
+  ports:
+  - name: sender
+    port: 9438
+    targetPort: sender
+
+
+priorityClassName: "metrics-medium-priority"
+
+cronTime: "0 6 * * *"
